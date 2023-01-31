@@ -1,12 +1,10 @@
 // importation de l'application express
 const express = require('express');
-
 const app = express();
-
-const mongoose = require('mongoose')
-
-// Protection des éléments sensible
-const dotenv = require('dotenv').config()
+const mongoose = require('mongoose');
+// Import du pluging dotenv et helmet
+const dotenv = require('dotenv').config();
+const helmet = require('helmet')
 
 // Importation des routes sauce et user 
 const userRoutes = require('./routes/user');
@@ -14,8 +12,8 @@ const sauceRoutes = require('./routes/sauce');
 
 const path = require('path');
 
-
-mongoose.connect(process.env.SECRET_DB,
+// Connexion au serveur MONGO DB 
+mongoose.connect(process.env.SECRET_DB,  //protection des données sensible 
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -36,7 +34,7 @@ app.use((req, res, next) => {
 
 
 
-
+app.use(helmet());
 app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes);
 
