@@ -2,19 +2,19 @@
 const Sauce = require('../models/Sauce');
 
 const fs = require('fs');
-
+// recuperer les sauces 
 exports.getAllSauce = (req, res, next) => {
     Sauce.find()
         .then(sauces => res.status(200).json(sauces))
         .catch(error => res.status(400).json({ error }))
 }
-
+// recuperer une sauce 
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => res.status(200).json(sauce))
         .catch(error => res.status(404).json({ error }));
 }
-
+// creer les sauces 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
 
@@ -32,7 +32,7 @@ exports.createSauce = (req, res, next) => {
 };
 
 
-
+// modifier les sauces
 exports.modifySauce = (req, res, next) => {
 
 
@@ -58,7 +58,7 @@ exports.modifySauce = (req, res, next) => {
 }
 
 
-
+// supprimer les sauces
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
@@ -79,7 +79,7 @@ exports.deleteSauce = (req, res, next) => {
         .catch(error =>
             res.status(500).json({ error }));
 };
-
+// aimer ou pas aimer une sauce 
 exports.likeSauce = (req, res, next) => {
 
     console.log(req.body.like);

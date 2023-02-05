@@ -1,3 +1,4 @@
+// middleware multer pour la gestion images 
 const multer = require('multer');
 const MIME_TYPES = {
     'image/jpg': 'jpg',
