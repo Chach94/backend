@@ -4,7 +4,7 @@ const app = express();
 const mongoose = require('mongoose');
 // Import du pluging dotenv et helmet
 const dotenv = require('dotenv').config();
-const helmet = require('helmet')
+
 
 // Importation des routes sauce et user 
 const userRoutes = require('./routes/user');
@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 
 
 
-app.use(helmet());
+
 app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes);
 

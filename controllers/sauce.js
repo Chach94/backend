@@ -8,6 +8,7 @@ exports.getAllSauce = (req, res, next) => {
         .then(sauces => res.status(200).json(sauces))
         .catch(error => res.status(400).json({ error }))
 }
+
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => res.status(200).json(sauce))
@@ -45,12 +46,15 @@ exports.modifySauce = (req, res, next) => {
             if (sauce.userId !== req.auth.userId) {
                 res.status(400).json({ message: 'Requête non autorisée' })
 
+            } else {
+
+                Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+                    .then(() => res.status(200).json({ message: 'Sauce modifié!' }))
+                    .catch(error => res.status(401).json({ error }));
             }
         })
 
-    Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
-        .then(() => res.status(200).json({ message: 'Sauce modifié!' }))
-        .catch(error => res.status(401).json({ error }));
+
 }
 
 
@@ -59,16 +63,16 @@ exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
             if (sauce.userId !== req.auth.userId) {
-                res.status(400).json({ message: 'Requête non autorisée' })
+                res.status(401).json({ message: 'Requête non autorisée' })
+            } else {
+
+                const filename = sauce.imageUrl.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => {
+                    Sauce.deleteOne({ _id: req.params.id })
+                        .then(() => { res.status(200).json({ message: 'sauce supprimé !' }) })
+                        .catch(error => res.status(401).json({ error }));
+                });
             }
-
-            const filename = sauce.imageUrl.split('/images/')[1];
-            fs.unlink(`images/${filename}`, () => {
-                Sauce.deleteOne({ _id: req.params.id })
-                    .then(() => { res.status(200).json({ message: 'sauce supprimé !' }) })
-                    .catch(error => res.status(401).json({ error }));
-            });
-
 
         })
 
